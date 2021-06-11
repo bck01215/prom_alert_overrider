@@ -1,13 +1,13 @@
 overrides:
   windows_disk_usage:
     regex:
-      - '{instance="terrablockhub.university.liberty.edu:9100", volume=~"C:.Volumes.*"}'
-      - '{instance="sqlpprd04.university.liberty.edu:9100",volume="C:"}'
-      - '{instance="terrablockhub.university.liberty.edu:9100",volume=~"[F|G]:"}'
+      - '{instance="host1.domain.com:9100", volume=~"C:.Volumes.*"}'
+      - '{instance="host2.domain.com:9100",volume="C:"}'
+      - '{instance="host3.domain.com:9100",volume=~"[F|G]:"}'
 
   linux_disk_usage: 
     regex:
-      - '{instance="crushftp1admin.liberty.edu:9100"}'
+      - '{instance="host4.liberty.edu:9100"}'
 
 
 
