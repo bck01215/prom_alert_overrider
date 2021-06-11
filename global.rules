@@ -1,0 +1,50 @@
+groups:
+  - name: Global_General
+    rules:
+      - alert: Global_High_Disk_Usage
+        expr: >
+          (
+            (instance:node_filesystem_used:ratio{fstype=~"(ext.|xfs|zfs)",job="node"} >= 90)
+            or (100.0 - 100 * (windows_logical_disk_free_bytes / windows_logical_disk_size_bytes{volume=~"[A-Z]:.*"}) >= 90)
+          )
+          unless
+            ignoring(mountpoint, fstype) (
+              override:Global_High_Disk_Usage
+            )
+          unless(
+            {{ overrides.windows_disk_usage}}
+          )
+          unless(
+            {{ overrides.linux_disk_usage}}
+          )
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          description: "{{ if $labels.mountpoint }}{{ $labels.mountpoint }}{{ else }}{{ $labels.volume }}{{ end }} is {{ $value | humanize }} percent full on {{ $labels.instance }}"
+          wiki: "https://wiki.os.liberty.edu/display/NOC/Prometheus+Global+Alerting+Rules"
+          title: "{{ if $labels.mountpoint }}{{ $labels.mountpoint }}{{ else }}{{ $labels.volume }}{{ end }} High Disk Usage"
+
+      - alert: Global_High_Disk_Usage
+        expr: >
+          (
+            (instance:node_filesystem_used:ratio{fstype=~"(ext.|xfs|zfs)",job="node"} >= 98)
+            or (100.0 - 100 * (windows_logical_disk_free_bytes / windows_logical_disk_size_bytes{volume=~"[A-Z]:.*"}) >= 98)
+          )
+          unless
+            ignoring(mountpoint, fstype) (
+              override:Global_High_Disk_Usage
+            )
+          unless(
+            {{ overrides.windows_disk_usage }}
+          )
+          unless(
+            {{ overrides.linux_disk_usage }}
+          )
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          description: "{{ if $labels.mountpoint }}{{ $labels.mountpoint }}{{ else }}{{ $labels.volume }}{{ end }} is {{ $value | humanize }} percent full on {{ $labels.instance }}"
+          wiki: "https://wiki.os.liberty.edu/display/NOC/Prometheus+Global+Alerting+Rules"
+          title: "{{ if $labels.mountpoint }}{{ $labels.mountpoint }}{{ else }}{{ $labels.volume }}{{ end }} High Disk Usage"
