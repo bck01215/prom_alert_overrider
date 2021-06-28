@@ -32,7 +32,7 @@ fn get_replacement_text(value: &str) -> std::string::String {
     let first = overrides.pop().unwrap();
     let mut text = first.as_str().unwrap().to_string();
     for i in overrides {
-        text.push_str("\n\t\t\t\t\t\tor ");
+        text.push_str(&("\n".to_owned() + &" ".repeat(12) + "or "));
         text.push_str(i.as_str().unwrap())
     }
     text
